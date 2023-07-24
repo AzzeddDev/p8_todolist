@@ -38,6 +38,7 @@ class UserController extends AbstractController
             $em = $this->doctrine->getManager();
             $password = $passwordHasher->hashPassword($user, $user->getPassword());
 
+            $user->setRoles(['ROLE_USER']);
             $user->setPassword($password);
 
             $em->persist($user);
