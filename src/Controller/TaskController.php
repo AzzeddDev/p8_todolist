@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
+use App\Repository\TaskRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -95,5 +96,16 @@ class TaskController extends AbstractController
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
         return $this->redirectToRoute('task_list');
+    }
+
+    /**
+     * @Route("/tasks/done", name="task_done")
+     */
+    public function tasksDone(TaskRepository $repo): Response
+    {
+        $tasks = $repo->findAll();
+        return $this->render('task/list_done.html.twig', [
+            'tasks' => $tasks
+        ]);
     }
 }
