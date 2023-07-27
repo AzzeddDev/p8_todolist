@@ -11,7 +11,7 @@ class TaskVoter extends Voter
 {
     const OWNER = 'owner';
 
-    protected function supports(string $attribute, $subject)
+    protected function supports(string $attribute, $subject): bool
     {
         if ($attribute !== self::OWNER) {
             return false;
@@ -24,7 +24,7 @@ class TaskVoter extends Voter
         return true;
     }
 
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
