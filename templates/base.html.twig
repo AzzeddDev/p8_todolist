@@ -58,7 +58,7 @@
                 {% endif %}
             </div>
 
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-md-12">
                     {% for flash_message in app.session.flashBag.get('success') %}
                         <div class="alert alert-success" role="alert">
@@ -77,24 +77,19 @@
                 </div>
             </div>
 
-            <br />
-
             {% block body %}{% endblock %}
         </div>
         <!-- /.container -->
 
-        <div class="container">
-
-            <hr>
-            <footer>
+        <footer>
+            <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        <p class="pull-right">Copyright &copy; OpenClassrooms</p>
+                        <p class="text-center">Copyright &copy; OpenClassrooms</p>
                     </div>
                 </div>
-            </footer>
-
-        </div>
+            </div>
+        </footer>
 
 {#        <script src="{{ asset('js/jquery.js') }}"></script>#}
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>

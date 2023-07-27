@@ -37,13 +37,13 @@
                                 <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
                             </form>
                         </div>
-                        {% else %}
-                            <div class="d-flex justify-content-between w-100">
-                                <button class="btn btn-secondary disabled btn-sm pull-right">
-                                        {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
-                                </button>
-                                <button class="btn btn-secondary disabled btn-sm pull-right">Supprimer</button>
-                            </div>
+                    {% else %}
+                        <div class="d-flex justify-content-between w-100">
+                            <button class="btn btn-secondary disabled btn-sm pull-right">
+                                {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
+                            </button>
+                            <button class="btn btn-secondary disabled btn-sm pull-right">Supprimer</button>
+                        </div>
                     {% endif %}
                 </div>
             </div>
