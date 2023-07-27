@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 class TaskController extends AbstractController
 {
@@ -19,15 +20,18 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks", name="task_list")
      */
-    public function listAction(): Response
+    public function listAction( TaskRepository $repo): Response
     {
-        return $this->render('task/list.html.twig', ['tasks' => $this->doctrine->getRepository(Task::class)->findAll()]);
+        $tasks = $repo->findAll();
+        return $this->render('task/list.html.twig', [
+            'tasks' => $tasks
+        ]);
     }
 
     /**
      * @Route("/tasks/create", name="task_create")
      */
-    public function createAction(Request $request): Response
+    public function createAction(Request $request, Security $security): Response
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -36,6 +40,9 @@ class TaskController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->doctrine->getManager();
+
+            $task->setUser($security->getUser());
+
             $em->persist($task);
             $em->flush();
 
