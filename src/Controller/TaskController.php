@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
@@ -96,13 +97,18 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task): Response
     {
-        $em = $this->doctrine->getManager();
-        $em->remove($task);
-        $em->flush();
+        if (
+            $task->getUser() === $this->getUser() || ($task->getUser() === null && $this->isGranted('ROLE_ADMIN'))
+        ) {
+            $em = $this->doctrine->getManager();
+            $em->remove($task);
+            $em->flush();
 
-        $this->addFlash('success', 'La tâche a bien été supprimée.');
+            $this->addFlash('success', 'La tâche a bien été supprimée.');
 
-        return $this->redirectToRoute('task_list');
+            return $this->redirectToRoute('task_list');
+        }
+        throw new UnauthorizedHttpException('Vous n avez pas les droits pour supprimer cette tâche.');
     }
 
     /**
