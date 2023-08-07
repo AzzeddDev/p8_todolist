@@ -36,9 +36,9 @@ class TaskVoter extends Voter
         /** @var Task $subject */
         $task = $subject;
 
-//        if ($task->getUser() === null) {
-//            return $user->isAdmin();
-//        }
+        if ($task->getUser() === null) {
+            return $user->isAdmin();
+        }
         return $user === $task->getUser();
     }
 }
