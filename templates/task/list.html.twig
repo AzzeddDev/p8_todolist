@@ -6,7 +6,7 @@
     <div class="col-12 mb-3">
         <a href="{{ path('task_create') }}" class="btn btn-primary pull-right">Créer une tâche</a>
     </div>
-    <div class="row">
+    <div class="row g-3">
         {% for task in tasks %}
         <div class="col-sm-4 col-lg-4 col-md-4">
             <div class="card h-100">
@@ -21,7 +21,9 @@
                         {% endif %}
                     </h4>
                     <h6 class="card-subtitle mb-2 text-body-secondary">
-                        {{ task.user.username }}
+                        {% if task.user is not null %}
+                            {{ task.user.username }}
+                        {% endif %}
                     </h6>
                     <p class="card-text">
                         {{ task.content }}
@@ -36,13 +38,6 @@
                             <form action="{{ path('task_delete', {'id' : task.id }) }}">
                                 <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
                             </form>
-                        </div>
-                    {% else %}
-                        <div class="d-flex justify-content-between w-100">
-                            <button class="btn btn-secondary disabled btn-sm pull-right">
-                                {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
-                            </button>
-                            <button class="btn btn-secondary disabled btn-sm pull-right">Supprimer</button>
                         </div>
                     {% endif %}
                 </div>
