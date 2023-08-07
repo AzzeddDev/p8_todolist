@@ -57,34 +57,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->tasks = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @see UserInterface
+     */
     public function getUsername(): string
     {
         return $this->username;
     }
 
-    public function setUsername($username)
+    public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
     }
 
-    public function getSalt()
+    /**
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
     {
         return null;
     }
 
+    /**
+     * @see UserInterface
+     */
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword($password)
+    public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
     }
 
     public function getEmail(): string
@@ -92,14 +105,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail($email)
+    public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
     }
 
-    public function setRoles($roles)
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
     }
 
     /**
@@ -114,12 +131,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+    public function isAdmin(): bool
+    {
+        return in_array('ROLE_ADMIN', $this->roles);
+    }
+
     public function eraseCredentials()
     {
     }
 
     /**
-     * @return Collection
+     * @return Collection|Task[]
      */
     public function getTasks(): ArrayCollection|Collection
     {
@@ -132,5 +154,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTasks(ArrayCollection|Collection $tasks): void
     {
         $this->tasks = $tasks;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
     }
 }
