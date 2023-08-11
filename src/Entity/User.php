@@ -53,7 +53,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private array $roles = [];
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->tasks = new ArrayCollection();
     }
 

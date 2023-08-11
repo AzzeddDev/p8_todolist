@@ -16,12 +16,14 @@ use Symfony\Component\Security\Core\Security;
 
 class TaskController extends AbstractController
 {
-    public function __construct(private readonly ManagerRegistry $doctrine) {}
+    public function __construct(private readonly ManagerRegistry $doctrine)
+    {
+    }
 
     /**
      * @Route("/tasks", name="task_list")
      */
-    public function listAction( TaskRepository $taskRepository): Response
+    public function listAction(TaskRepository $taskRepository): Response
     {
         $tasks = $taskRepository->findAll();
         return $this->render('task/list.html.twig', [
@@ -97,9 +99,8 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task): Response
     {
-        if (
-            $task->getUser() === $this->getUser() || ($task->getUser() === null && $this->isGranted('ROLE_ADMIN'))
-        ) {
+        if ($task->getUser() === $this->getUser()
+            || ($task->getUser() === null && $this->isGranted('ROLE_ADMIN'))) {
             $em = $this->doctrine->getManager();
             $em->remove($task);
             $em->flush();

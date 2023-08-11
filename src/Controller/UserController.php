@@ -14,7 +14,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
-    public function __construct(private readonly ManagerRegistry $doctrine) {}
+    public function __construct(private readonly ManagerRegistry $doctrine)
+    {
+    }
 
     /**
      * @Route("/users", name="user_list")
