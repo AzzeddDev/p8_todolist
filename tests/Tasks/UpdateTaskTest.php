@@ -5,7 +5,7 @@ namespace App\Tests\Tasks;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class DeleteTaskTest extends WebTestCase
+class UpdateTaskTest extends WebTestCase
 {
     private KernelBrowser $client;
 
@@ -21,11 +21,18 @@ class DeleteTaskTest extends WebTestCase
         $this->client->submit($form, ['_username' => $username, '_password' => $password]);
     }
 
-    public function testDeleteAction()
+
+    public function testModifyAction()
     {
         $this->loginUser();
 
-        $this->client->request('GET', '/tasks/31/delete');
+        $crawler = $this->client->request('GET', '/tasks/12/edit');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+
+        $form = $crawler->selectButton('Modifier')->form();
+        $form['task[title]'] = 'Un nouveau titre';
+        $form['task[content]'] = 'Un nouveau Lorem Ipsum';
+        $this->client->submit($form);
 
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
@@ -33,8 +40,13 @@ class DeleteTaskTest extends WebTestCase
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals(1, $crawler->filter('div.alert-success')->count());
+    }
 
-        $this->client->request('GET', '/tasks/1/delete');
-        $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
+    public function testNoneTaskModifyAction()
+    {
+        $this->loginUser();
+
+        $crawler = $this->client->request('GET', '/tasks/11/edit');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
     }
 }

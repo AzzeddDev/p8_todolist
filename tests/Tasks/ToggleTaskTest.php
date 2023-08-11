@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Tests\Admin;
+namespace App\Tests\Tasks;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class AdminLogTest extends WebTestCase
+class ToggleTaskTest extends WebTestCase
 {
     private KernelBrowser $client;
 
@@ -14,26 +14,25 @@ class AdminLogTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    public function loginUser($username='AdminZoe', $password='1234'): void
+    public function loginUser($username='John', $password='1234'): void
     {
         $crawler = $this->client->request('GET', '/login');
         $form = $crawler->selectButton('Connexion')->form();
         $this->client->submit($form, ['_username' => $username, '_password' => $password]);
     }
 
-    public function testLogIn()
+    public function testToggleTaskAction(): void
     {
         $this->loginUser();
-        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
-        $this->assertResponseRedirects('http://localhost/');
-    }
 
-    public function testLogoutCheck()
-    {
-        $this->loginUser();
-        $crawler = $this->client->request('GET', '/');
-        $crawler->selectLink('Se déconnecter')->link();
-        $this->throwException(new \Exception('Logout'));
+        $this->client->request('GET', '/tasks/13/toggle');
+
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $crawler = $this->client->followRedirect();
+
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('div.alert-success')->count());
+
     }
 }

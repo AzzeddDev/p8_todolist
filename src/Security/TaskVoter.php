@@ -13,11 +13,7 @@ class TaskVoter extends Voter
 
     protected function supports(string $attribute, $subject): bool
     {
-        if ($attribute !== self::OWNER) {
-            return false;
-        }
-
-        if (!$subject instanceof Task) {
+        if ($attribute !== self::OWNER || !$subject instanceof Task) {
             return false;
         }
 
@@ -39,6 +35,7 @@ class TaskVoter extends Voter
         if ($task->getUser() === null) {
             return $user->isAdmin();
         }
+
         return $user === $task->getUser();
     }
 }

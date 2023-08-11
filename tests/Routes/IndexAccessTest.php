@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Tests\Tasks;
+namespace App\Tests\Routes;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class DeleteTaskTest extends WebTestCase
+class IndexAccessTest extends WebTestCase
 {
     private KernelBrowser $client;
 
@@ -21,20 +21,19 @@ class DeleteTaskTest extends WebTestCase
         $this->client->submit($form, ['_username' => $username, '_password' => $password]);
     }
 
-    public function testDeleteAction()
+    public function testIndexAction()
     {
         $this->loginUser();
 
-        $this->client->request('GET', '/tasks/31/delete');
-
-        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
-
-        $crawler = $this->client->followRedirect();
-
+        $this->client->request('GET', '/');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals(1, $crawler->filter('div.alert-success')->count());
-
-        $this->client->request('GET', '/tasks/1/delete');
-        $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
     }
+
+    public function testIndexNoLogin()
+    {
+        $this->client->request('GET', '/');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+    }
+
+
 }
